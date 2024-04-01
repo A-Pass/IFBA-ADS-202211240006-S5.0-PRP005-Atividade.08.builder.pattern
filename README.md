@@ -72,69 +72,80 @@ Se utilizar um builder de DOCX...
 Você também deve implementar uma classe diretora ( DocumentDirector ) que deve possuir uma função que já automatiza os passos para criar um contrato (ele recebe um array de strings que representam os parágrafos do contrato). O builder a ser utilizado pelo diretor lhe é passado como parâmetro.
 
 Segue abaixo o código Mermaid do diagrama de classes.
-
-
+ 
     classDiagram
-    class DocumentBuilder {
-        <<interface>>
-        + addPage() DocumentBuilder
-        + addTitle(content: string) DocumentBuilder
-        + addSubtitle(content: string) DocumentBuilder
-        + addParagraph(content: string) DocumentBuilder
-        + reset() DocumentBuilder
-        + build(filename: string) Document
-    }
-    class Element {
-        + type: "title" | "subtitle" | "paragraph" | "page"
-        + content: string;
-    }
+        class DocumentBuilder {
+            <<interface>>
+            + addPage() DocumentBuilder
+            + addTitle(content: string) DocumentBuilder
+            + addSubtitle(content: string) DocumentBuilder
+            + addParagraph(content: string) DocumentBuilder
+            + reset() DocumentBuilder
+            + build(filename: string) Document
+        }
 
-    class Document {
-        <<interface>>
-        + name: string;
-        + contents: Array~Element~;
-        + type: string;
-    }
-    class PDF {
-        + version: string
-        + isProtected: boolean
-        + password: string
-        + constructor(name: string, elements: Array~Element~, ve
-    }
-    class DOCX {
-        + version: string;
-        + constructor(name: string, type: string, version: strin
-        + addPage()
-        + addTitle(content: string)
-        + addSubtitle(content: string)
-        + addParagraph(content: string)
-    }
-    class PDFBuilder {
-        - elements: Array~Element~
-    }
-    class DOCXBuilder {
-        - document: DOCX
-    }
-    class DocumentDirector {
-        - builder: DocumentBuilder
-        + constructor(builder: DocumentBuilder)
-        + createContract(content: Array~string~, filename: strin
-    }
-    DocumentBuilder <|-- PDFBuilder
-    DocumentBuilder <|-- DOCXBuilder
-    PDF --|> Document
-    DOCX --|> Document
-    PDFBuilder --> PDF
-    DocumentBuilder --> Document
-    DocumentDirector o-- DocumentBuilder
-    Document o-- Element
-    DOCXBuilder o-- DOCX
+        class Element {
+            + type: "title" | "subtitle" | "paragraph" | "page"
+            + content: string;
+        }
 
+        class Document {
+            <<interface>>
+            + name: string;
+            + contents:  Array~Element~;
+            + type: string;
+        }
+
+        class PDF {
+            + version: string
+            + isProtected: boolean
+            + password: string
+            
+            + constructor(name: string, elements: Array~Element~, version: string, isProtected: boolean, password: string)
+            
+        }
+
+        class DOCX {
+            + version: string;
+            + constructor(name: string, type: string, version: string)
+            + addPage()
+            + addTitle(content: string)
+            + addSubtitle(content: string)
+            + addParagraph(content: string)
+        }
+
+        class PDFBuilder {
+            - elements: Array~Element~
+
+        }
+
+        class DOCXBuilder {
+            - document: DOCX
+        }
+
+        class DocumentDirector {
+            - builder: DocumentBuilder
+            + constructor(builder: DocumentBuilder)
+            + createContract(content: Array~string~, filename: string) Document
+        }
+
+        DocumentBuilder <|-- PDFBuilder
+        DocumentBuilder <|-- DOCXBuilder
+        PDF --|> Document
+        DOCX --|> Document
+        PDFBuilder --> PDF
+        DocumentBuilder --> Document
+        DocumentDirector o-- DocumentBuilder
+        Document o-- Element
+        DOCXBuilder o-- DOCX
+
+  
 Perceba que as classes PDFBuilder e DOCXBuilder possuem estratégias diferentes na sua construção. PDFBuilder guarda todos os passos em seu atributo elements e, no método build, constrói o produto todo de uma vez. Diferentemente, a classe DOCXBuilder que repassa todos os passos de construção para o objeto DOCX e, no método build, só retorna o objeto que foi criado pouco a pouco. Ambas são metodologias válidas no padrão Builder.
 
 Envie o código do projeto compactado através do Google Classroom.
 
 ```mermaid
+
 classDiagram
     class DocumentBuilder {
         <<interface>>
@@ -145,6 +156,7 @@ classDiagram
         + reset() DocumentBuilder
         + build(filename: string) Document
     }
+
     class Element {
         + type: "title" | "subtitle" | "paragraph" | "page"
         + content: string;
@@ -153,34 +165,43 @@ classDiagram
     class Document {
         <<interface>>
         + name: string;
-        + contents: Array~Element~;
+        + contents:  Array~Element~;
         + type: string;
     }
+
     class PDF {
         + version: string
         + isProtected: boolean
         + password: string
+		
         + constructor(name: string, elements: Array~Element~, version: string, isProtected: boolean, password: string)
+        
     }
+
     class DOCX {
         + version: string;
-        + constructor(name: string, type: string, version: strin
+        + constructor(name: string, type: string, version: string)
         + addPage()
         + addTitle(content: string)
         + addSubtitle(content: string)
         + addParagraph(content: string)
     }
+
     class PDFBuilder {
         - elements: Array~Element~
+
     }
+
     class DOCXBuilder {
         - document: DOCX
     }
+
     class DocumentDirector {
         - builder: DocumentBuilder
         + constructor(builder: DocumentBuilder)
-        + createContract(content: Array~string~, filename: strin
+        + createContract(content: Array~string~, filename: string) Document
     }
+
     DocumentBuilder <|-- PDFBuilder
     DocumentBuilder <|-- DOCXBuilder
     PDF --|> Document
@@ -190,4 +211,5 @@ classDiagram
     DocumentDirector o-- DocumentBuilder
     Document o-- Element
     DOCXBuilder o-- DOCX
+
 ``````
