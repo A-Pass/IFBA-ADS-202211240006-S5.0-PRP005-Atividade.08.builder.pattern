@@ -160,7 +160,7 @@ classDiagram
         + version: string
         + isProtected: boolean
         + password: string
-        + constructor(name: string, elements: Array~Element~, ve
+        + constructor(name: string, elements: Array~Element~, version: string, isProtected: boolean, password: string)
     }
     class DOCX {
         + version: string;
